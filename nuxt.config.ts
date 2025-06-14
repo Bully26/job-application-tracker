@@ -2,5 +2,6 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss','@formkit/auto-animate']
+  modules: ['@nuxtjs/tailwindcss','@formkit/auto-animate','@nuxt/ui-pro','nuxt-icons'],
+  css: ['~/assets/css/main.css']
 })
