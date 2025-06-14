@@ -1,9 +1,7 @@
 <template>
   <div class="text-black z-10 bg-white w-[100%] h-full p-5">
     <div class="bg-white w-[100%] h-full">
-      <div class="p-10 text-4xl border-b-10">
-        Your Applications {{ searchKey }}
-      </div>
+      <div class="p-5 text-4xl border-b-10">Your Applications</div>
       <div>
         <div class="flex justify-between text-2xl my-2 p-2">
           <div class="bg-slate-200 rounded-4xl p-2">
@@ -11,7 +9,6 @@
               type="text"
               class="bg-red focus:outline-none pl-5"
               v-model="searchKey"
-              @click="clickedSearch"
             />
             <Icon
               name="material-symbols:search"
@@ -19,7 +16,6 @@
               class="transform translate-y-1 -translate-x-2"
             />
           </div>
-          <div>edit</div>
         </div>
 
         <div
@@ -35,38 +31,143 @@
           </div>
         </div>
         <div id="table data" class="overflow-auto h-200 text-xl">
-          
           <draggable
-            v-model="applicationsData"
+            v-if="searchKey == ''"
+            v-model="listStaticView"
             item-key="id"
             tag="ul"
             v-auto-animate
           >
             <template #item="{ element }">
               <li
-                class="flex gap-1 w-[100%] bg-slate-100 justify-around  mb-2 rounded-3xl "
+                class="flex gap-1 w-[100%] bg-slate-100 justify-around mb-2 rounded-3xl h-20"
               >
-                <div class="w-[15%] content-center">
+                <div
+                  class="w-[15%] content-center overoverflow-x-auto whitespace-nowrap"
+                >
                   {{ element.Company }}
                 </div>
                 <div class="w-[15%] content-center">
-                  <div class="m-4 ml-0 p-2 rounded-2xl w-[70%"   :class="stage_color(element.Stage)" >
+                  <div
+                    class="m-4 ml-0 p-2 rounded-2xl w-[70%] overflow-x-auto whitespace-nowrap"
+                    :class="stage_color(element.Stage)"
+                  >
                     {{ element.Stage }}
                   </div>
                 </div>
                 <div class="w-[20%] content-center">
-                  <div class="m-4 ml-0 p-2 rounded-2xl w-[70%]">
+                  <div
+                    class="m-4 ml-0 p-2 rounded-2xl w-[70%] overflow-x-auto whitespace-nowrap"
+                  >
                     {{ element.Position }}
                   </div>
                 </div>
                 <div class="w-[15%] content-center">
-                  {{ element.Deadline }}
+                  <div
+                    class="m-4 ml-0 p-2 rounded-2xl w-[70%] overflow-x-auto whitespace-nowrap"
+                  >
+                    {{ element.Deadline }}
+                  </div>
                 </div>
                 <div class="w-[10%] content-center">
-                  {{ element.Url }}
+                  <div
+                    class="m-4 ml-0 p-2 rounded-2xl w-[70%] overflow-x-auto whitespace-nowrap"
+                  >
+                    {{ element.Url }}
+                  </div>
                 </div>
                 <div class="w-[15%] content-center">
-                  {{ element.Resumelink }}
+                  <div
+                    class="m-4 ml-0 p-2 rounded-2xl w-[70%] overflow-x-auto whitespace-nowrap"
+                  >
+                    {{ element.Resumelink }}
+                  </div>
+                </div>
+                <div class="absolute z-10 end-0 self-center">
+                  <Icon
+                    name="simple-line-icons:options-vertical"
+                    class="transform -translate-x-6 size-6 bg-slate-500"
+                    @click="showModal = element"
+                  />
+                  <Teleport to="body">
+                    <modal
+                      :show="showModal == element"
+                      @close="closeModal()"
+                      :mdata="element"
+                    >
+                    </modal>
+                  </Teleport>
+                </div>
+              </li>
+            </template>
+          </draggable>
+          <draggable
+            v-if="searchKey != ''"
+            v-model="searchedList"
+            item-key="id"
+            tag="ul"
+            v-auto-animate
+          >
+            <template #item="{ element }">
+              <li
+                class="flex gap-1 w-[100%] bg-slate-100 justify-around mb-2 rounded-3xl h-20"
+              >
+                <div
+                  class="w-[15%] content-center overoverflow-x-auto whitespace-nowrap"
+                >
+                  {{ element.Company }}
+                </div>
+                <div class="w-[15%] content-center">
+                  <div
+                    class="m-4 ml-0 p-2 rounded-2xl w-[70%] overflow-x-auto whitespace-nowrap"
+                    :class="stage_color(element.Stage)"
+                  >
+                    {{ element.Stage }}
+                  </div>
+                </div>
+                <div class="w-[20%] content-center">
+                  <div
+                    class="m-4 ml-0 p-2 rounded-2xl w-[70%] overflow-x-auto whitespace-nowrap"
+                  >
+                    {{ element.Position }}
+                  </div>
+                </div>
+                <div class="w-[15%] content-center">
+                  <div
+                    class="m-4 ml-0 p-2 rounded-2xl w-[70%] overflow-x-auto whitespace-nowrap"
+                  >
+                    {{ element.Deadline }}
+                  </div>
+                </div>
+                <div class="w-[10%] content-center">
+                  <div
+                    class="m-4 ml-0 p-2 rounded-2xl w-[70%] overflow-x-auto whitespace-nowrap"
+                  >
+                    {{ element.Url }}
+                  </div>
+                </div>
+                <div class="w-[15%] content-center">
+                  <div
+                    class="m-4 ml-0 p-2 rounded-2xl w-[70%] overflow-x-auto whitespace-nowrap"
+                  >
+                    {{ element.Resumelink }}
+                  </div>
+                </div>
+                <div class="absolute z-10 end-0 self-center">
+                  <Icon
+                    name="simple-line-icons:options-vertical"
+                    class="transform -translate-x-6 size-6 bg-slate-500"
+                    @click="showModal=element"
+                  />
+                  <Teleport to="body">
+                    <modal
+                      :show="showModal == element"
+                      @close="closeModal()"
+                      :mdata="element"
+
+                    >
+                    </modal>
+                  </Teleport>
                 </div>
               </li>
             </template>
@@ -79,8 +180,23 @@
 
 <script setup>
 import draggable from "vuedraggable";
+import { useUserStore } from "~/stores/user";
 
 let searchKey = ref("");
+let showModal = ref(null);
+
+function open_modal(val) {
+  showModal = val;
+}
+
+
+function closeModal() {
+    alert('object copied');
+    showModal.value = null;
+    listStaticView.value = [...applicationsData.value];
+   
+}
+
 const searchedList = computed(() => {
   const search = searchKey.value.toLowerCase();
   return applicationsData.value.filter((app) => {
@@ -89,6 +205,22 @@ const searchedList = computed(() => {
     );
   });
 });
+
+function retval() {
+  if (searchKey != "") return searchedList;
+  else return applicationsData;
+}
+function at() {
+  alert("edit option clicked");
+}
+
+function setbye(){
+       useUserStore().list = useUserStore().list.filter(
+        (app) => app.Company !== 'Apple'
+      );
+  };
+
+const search = ref(true);
 
 const applicationFields = ref([
   {
@@ -116,195 +248,12 @@ const applicationFields = ref([
     icon: "mdi-file-document",
   },
 ]);
-const applicationsData = ref([
-  {
-    id: 1,
-    Company: "Apple",
-    Stage: "Not Applied",
-    Position: "Staff Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 2,
-    Company: "Google",
-    Stage: "Applied",
-    Position: "Senior Product Manager",
-    Deadline: "January 7, 2025",
-    InterviewDate: "January 15, 2025",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 3,
-    Company: "Cisco",
-    Stage: "Interview",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "January 17, 2025",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 4,
-    Company: "Netflix",
-    Stage: "Rejected",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 5,
-    Company: "Microsoft",
-    Stage: "Rejected",
-    Position: "Product Manager",
-    Deadline: "January 9, 2025",
-    InterviewDate: "January 11, 2025",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 6,
-    Company: "Datadog",
-    Stage: "Offered",
-    Position: "Staff Product Manager",
-    Deadline: "January 5, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 7,
-    Company: "Samsara",
-    Stage: "Interview",
-    Position: "Product Manager",
-    Deadline: "January 4, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 8,
-    Company: "Databricks",
-    Stage: "Waiting for a referral",
-    Position: "Senior Product Manager",
-    Deadline: "January 7, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 9,
-    Company: "HP",
-    Stage: "Rejected",
-    Position: "Senior Product Manager",
-    Deadline: "January 6, 2025",
-    InterviewDate: "January 16, 2025",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 10,
-    Company: "Meta",
-    Stage: "Applied",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 11,
-    Company: "Blind",
-    Stage: "Rejected",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 12,
-    Company: "Reddit",
-    Stage: "Applied",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "January 11, 2025",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 13,
-    Company: "AWS",
-    Stage: "Rejected",
-    Position: "Staff Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 14,
-    Company: "Snowflake",
-    Stage: "Rejected",
-    Position: "Principal Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 15,
-    Company: "TikTok",
-    Stage: "Applied",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 16,
-    Company: "Snap",
-    Stage: "Waiting for a referral",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 17,
-    Company: "Block",
-    Stage: "Rejected",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-]);
+
+
+
+
+const applicationsData = computed(() => useUserStore().list);
+const listStaticView = ref([...applicationsData.value]);
 
 function getWidth(name) {
   const widthMap = {
@@ -318,6 +267,8 @@ function getWidth(name) {
 
   return widthMap[name] || "10%";
 }
+
+function clickedSearch() {}
 
 function stage_color(stage) {
   const stageMap = {

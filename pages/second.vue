@@ -1,214 +1,25 @@
 <template>
-  <div>
-    <h2>Draggable List</h2>
-   
-    <div>
-      <div @click="add()" class="bg-red-500">add</div>
-      <div>sub</div>
+  <div class="p-6 relative">
+    <button @click="isDialogOpen = true" class="px-4 py-2 bg-green-600 text-white rounded">
+      Open Modal
+    </button>
+
+
+    <div class="mt-6 bg-gray-100 p-4 rounded">
+      <p>This is a normal component.</p>
+      <input type="text" placeholder="Try typing here" class="mt-2 p-2 border rounded w-full" />
     </div>
+
+  
+    <BaseDialog :show="isDialogOpen" @close="isDialogOpen = false">
+      <h2 class="text-xl font-bold">Modal Active</h2>
+      <p class="mt-2">This dialog blocks all background interaction.</p>
+    </BaseDialog>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import draggable from "vuedraggable";
 
-const items = ref([
-  { id: 1, name: "Apple" },
-  { id: 2, name: "Banana" },
-  { id: 3, name: "Orange" },
-  { id: 4, name: "Grapes" },
-]);
-function add() {
-  items.value.push({ id: 6, name: "bananaan" });
-}
-const applicationsData = ref([
-  {
-    id: 1,
-    Company: "Apple",
-    Stage: "Not Applied",
-    Position: "Staff Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 2,
-    Company: "Google",
-    Stage: "Applied",
-    Position: "Senior Product Manager",
-    Deadline: "January 7, 2025",
-    InterviewDate: "January 15, 2025",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 3,
-    Company: "Cisco",
-    Stage: "Interview",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "January 17, 2025",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 4,
-    Company: "Netflix",
-    Stage: "Rejected",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 5,
-    Company: "Microsoft",
-    Stage: "Rejected",
-    Position: "Product Manager",
-    Deadline: "January 9, 2025",
-    InterviewDate: "January 11, 2025",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 6,
-    Company: "Datadog",
-    Stage: "Offered",
-    Position: "Staff Product Manager",
-    Deadline: "January 5, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 7,
-    Company: "Samsara",
-    Stage: "Interview",
-    Position: "Product Manager",
-    Deadline: "January 4, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 8,
-    Company: "Databricks",
-    Stage: "Waiting for a referral",
-    Position: "Senior Product Manager",
-    Deadline: "January 7, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 9,
-    Company: "HP",
-    Stage: "Rejected",
-    Position: "Senior Product Manager",
-    Deadline: "January 6, 2025",
-    InterviewDate: "January 16, 2025",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 10,
-    Company: "Meta",
-    Stage: "Applied",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 11,
-    Company: "Blind",
-    Stage: "Rejected",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 12,
-    Company: "Reddit",
-    Stage: "Applied",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "January 11, 2025",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 13,
-    Company: "AWS",
-    Stage: "Rejected",
-    Position: "Staff Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 14,
-    Company: "Snowflake",
-    Stage: "Rejected",
-    Position: "Principal Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 15,
-    Company: "TikTok",
-    Stage: "Applied",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "No",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 16,
-    Company: "Snap",
-    Stage: "Waiting for a referral",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-  {
-    id: 17,
-    Company: "Block",
-    Stage: "Rejected",
-    Position: "Senior Product Manager",
-    Deadline: "January 13, 2025",
-    InterviewDate: "",
-    Url: "linkedin.com/job",
-    Referral: "Referred!",
-    Resumelink: "Resume Template",
-  },
-]);
+
+const isDialogOpen = ref(false);
 </script>
