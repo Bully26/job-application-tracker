@@ -1,7 +1,7 @@
 
 <template>
   <div class="bg-white min-h-screen ">
-  <NuxtLayout class="w-[6%]">
+  <NuxtLayout class="w-[60%]">
            <NuxtPage/>
   </NuxtLayout>
   </div>
