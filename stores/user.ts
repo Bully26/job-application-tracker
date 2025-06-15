@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 export const useUserStore = defineStore("UserData", {
   state: () => ({
-    small:'hii',
+    small: "hii",
     list: [
       {
         id: 1,
@@ -192,22 +192,34 @@ export const useUserStore = defineStore("UserData", {
         Resumelink: "Resume Template",
       },
     ],
+    profile: {
+      name: "John Doe",
+      email: "john.doe@example.com",
+      profileImageUrl: "/public/image.png",
+      about:
+        "I am a software developer with a passion for building modern web applications and working with frontend frameworks like Vue.js.",
+      dashboard: {
+        info: "Some quick stats or user-related info",
+        chart1: "Data for circle graph (e.g. skill distribution)",
+        chart2: "Data for bar graph (e.g. project contributions over time)",
+      },
+      editable: true,
+    },
   }),
   getters: {
     getlist: (state) => state.list,
   },
   actions: {
     replace(updated, original) {
-    const index = this.list.findIndex((item) => item == original);
-    if (index !== -1) {
-      this.list[index] = { ...updated };
-    }
-  },
+      const index = this.list.findIndex((item) => item == original);
+      if (index !== -1) {
+        this.list[index] = { ...updated };
+      }
+    },
     del(val) {
-       this.list = this.list.filter((app)=>{
-         return !(app.Company===val.Company && app.Position===val.Position);
-       }
-      );
+      this.list = this.list.filter((app) => {
+        return !(app.Company === val.Company && app.Position === val.Position);
+      });
     },
   },
 });
