@@ -1,15 +1,26 @@
 <template>
   <div>
-    <NuxtLink 
-      to="/profile" 
-      class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-    >
-      Get Started
-    </NuxtLink>
+    <introAppHeader />
+    <main>
+      <introHeroSection />
+      <introStatsSection />
+      <introFeaturesSection />
+      <introBenefitsSection />
+      <introCTASection />
+    </main>
+    <introAppFooter />
   </div>
 </template>
 
 <script setup>
-// Redirect to profile page
-await navigateTo('/profile')
+definePageMeta({
+  layout: false,
+})
+useSeoMeta({
+  title: 'JobTracker - Land Your Dream Job with Smart Application Tracking',
+  ogTitle: 'JobTracker - Land Your Dream Job with Smart Application Tracking',
+  description: 'Organize your resumes, track applications, and monitor your job search progress all in one powerful platform. Join thousands of professionals who\'ve streamlined their career journey.',
+  ogDescription: 'Organize your resumes, track applications, and monitor your job search progress all in one powerful platform.',
+  twitterCard: 'summary_large_image',
+})
 </script>
