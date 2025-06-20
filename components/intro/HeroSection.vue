@@ -24,7 +24,7 @@
 
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <NuxtLink to="/signup" class="btn-primary inline-flex items-center text-lg px-8 py-4">
+          <NuxtLink to="/auth/signup" class="btn-primary inline-flex items-center text-lg px-8 py-4">
             Start Free Today
             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>

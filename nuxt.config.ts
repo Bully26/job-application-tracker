@@ -1,10 +1,6 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: [
-    '@nuxt/ui',
-    '@pinia/nuxt',
-    '@vueuse/nuxt'
-  ],
+  modules: ['@nuxt/ui', '@pinia/nuxt', '@vueuse/nuxt', '@nuxtjs/supabase'],
   css: ['~/assets/css/main.css'],
   app: {
     head: {

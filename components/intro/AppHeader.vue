@@ -15,10 +15,10 @@
 
         <!-- Desktop Navigation -->
         <nav class="hidden md:flex items-center space-x-8">
-          <NuxtLink to="/login" class="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-200">
+          <NuxtLink to="/auth/login" class="bg-white hover:bg-blue-100 text-slate-600 font-medium py-3 px-6 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
             Sign In
           </NuxtLink>
-          <NuxtLink to="/signup" class="btn-primary">
+          <NuxtLink to="/auth/signup" class="btn-primary">
             Get Started
           </NuxtLink>
         </nav>
@@ -34,10 +34,10 @@
       <!-- Mobile Menu -->
       <div v-if="mobileMenuOpen" class="md:hidden py-4 border-t border-gray-100">
         <div class="flex flex-col space-y-4">
-          <NuxtLink to="/login" class="text-gray-600 hover:text-gray-900 font-medium">
+          <NuxtLink to="auth/login" class="text-gray-600 hover:text-gray-900 font-medium">
             Sign In
           </NuxtLink>
-          <NuxtLink to="/signup" class="btn-primary inline-block text-center">
+          <NuxtLink to="auth/signup" class="btn-primary inline-block text-center">
             Get Started
           </NuxtLink>
         </div>
