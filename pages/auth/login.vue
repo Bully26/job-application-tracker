@@ -134,16 +134,24 @@
 
         <p class="mt-6 text-center text-sm text-gray-600">
           Don't have an account?
-          <NuxtLink to="/signup" class="font-medium text-blue-600 hover:text-primary-500">
+          <NuxtLink @click="handleLogin" class="font-medium text-blue-600 hover:text-primary-500">
             Sign up
           </NuxtLink>
         </p>
+         <div v-if="loggedin" class="mt-6 text-center text-sm text-red-500"  @click="checklogin">
+          successfully logged in
+         </div>
+         <div v-else class="mt-6 text-center text-sm text-red-500" @click="checklogin">
+          not logged in
+         </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+const { supabase } = useSupabase();
+
 useSeoMeta({
   title: 'Sign In - JobTracker',
   description: 'Sign in to your JobTracker account to continue tracking your job applications.'
@@ -152,16 +160,38 @@ definePageMeta({
   layout: false,
 })
 
+
 const form = reactive({
   email: '',
   password: '',
   rememberMe: false
 })
 
+let loggedin = ref(false);
 const showPassword = ref(false)
 
-const handleLogin = () => {
-  // Handle login logic here
-  console.log('Login attempt:', form)
+const handleLogin = async () => {
+  const { error } = await supabase.auth.signIn({
+    email: form.email,
+    password: form.password
+  })
+  if (error) {
+    alert('Login failed: ' + error.message);
+    console.error('Login error:', error)
+  } else {
+    alert('Login successful!');
+    console.log('Login successful:', data)
+  }
 }
+async function checklogin() {
+  const { data, error } = await supabase.auth.getUser();
+  if (error) {
+    console.error('Error fetching user:', error);
+  } else {
+    console.log('Current user:', data.user);
+    alert('Current user: ' + JSON.stringify(data.user));
+    loggedin.value = true;
+  }
+} 
+
 </script>

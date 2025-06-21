@@ -57,6 +57,10 @@ import StatCard from '~/components/ui/StatCard.vue'
 import ProfileCard from '~/components/profile/ProfileCard.vue'
 import PersonalInfo from '~/components/profile/PersonalInfo.vue'
 
+definePageMeta({
+ middleware: 'auth'
+})
+
 const editMode = ref(false)
 
 const profile = reactive({
