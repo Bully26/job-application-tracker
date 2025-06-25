@@ -1,0 +1,39 @@
+{
+  "name": "job-tracker-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@formkit/auto-animate": "^0.8.2",
+    "@headlessui/vue": "^1.7.16",
+    "@heroicons/vue": "^2.2.0",
+    "@nuxt/icon": "^1.14.0",
+    "@nuxtjs/supabase": "^1.5.2",
+    "@pinia/nuxt": "^0.5.1",
+    "@supabase/supabase-js": "^2.50.0",
+    "@vueuse/core": "^10.5.0",
+    "@vueuse/nuxt": "^10.5.0",
+    "dayjs": "^1.11.13",
+    "lucide-vue-next": "^0.518.0",
+    "nuxt": "^3.8.0",
+    "pinia": "^2.1.7",
+    "vue": "^3.3.8",
+    "vue-draggable-next": "^2.2.1",
+    "vue-router": "^4.5.1",
+    "vuedraggable": "^4.1.0"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxtjs/tailwindcss": "^7.0.0-beta.0",
+    "@tailwindcss/forms": "^0.5.7",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.10"
+  }
+}
