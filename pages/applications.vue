@@ -19,7 +19,6 @@
 
     <Model
       v-model="showModal" 
-      @submit="handleApplicationSubmit"
     /> 
 
     <!-- Search -->
@@ -57,6 +56,7 @@ import Model from '~/components/applications/Modeladd.vue'
 const showAddModal = ref(false)
 const searchQuery = ref('')
 const showModal = ref(false);
+
 
 const {applications} = storeToRefs(useJobStore());
 

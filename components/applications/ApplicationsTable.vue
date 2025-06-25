@@ -1,5 +1,6 @@
 <template>
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    {{ showModal }}
     <div class="overflow-x-auto overflow-y-scroll">
       <table class="w-full">
         <thead class="bg-gray-50">
@@ -27,31 +28,32 @@
             </th>
           </tr>
         </thead>
-          <Draggable v-model="applications" item-key="id" class="drag-area w-full" @end="onDragEnd" tag="tbody" v-auto-animate>
-            <template #item="{ element }">
-              <ApplicationRow :key="element.id" :application="element" />
-            </template>
-          </Draggable>
+        <Draggable v-model="applications" item-key="id" class="drag-area w-full" @end="onDragEnd" tag="tbody"
+          v-auto-animate>
+          <template #item="{ element }">
+            <ApplicationRow :key="element.id" :application="element" v-on:edit="showmod" />
+          </template>
+        </Draggable>
       </table>
-
-
     </div>
+    <Modeledit v-model="showModal" :editdata="editval" />
   </div>
 </template>
 <script setup>
 import ApplicationRow from './ApplicationRow.vue'
 import Draggable from 'vuedraggable'
+import Modeledit from './Modeledit.vue'
 
+
+const showModal = ref(false);
 const { applications } = storeToRefs(useJobStore());
 const samp = ref({ ...applications });
+const editval = ref({});
 
-const items = ref([
-  { id: 1, name: '🍎 Apple' },
-  { id: 2, name: '🍌 Banana' },
-  { id: 3, name: '🍇 Grape' },
-  { id: 4, name: '🍑 Peach' }
-])
+const showmod = (element) => {
+  editval.value = element;
+  showModal.value = true;
 
+}
 
-defineEmits(['edit', 'delete'])
 </script>

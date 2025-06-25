@@ -40,7 +40,7 @@
           
           class="text-blue-600 hover:text-blue-800"
         >
-          <PencilIcon class="w-4 h-4" />
+          <PencilIcon class="w-4 h-4" @click="$emit('edit',application)" />
         </button>
         <button 
           @click="del"
@@ -109,7 +109,7 @@
 <script setup>
 import { ArrowTopRightOnSquareIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import StatusBadge from '../ui/StatusBadge.vue'
-import Modeledit from './Modeledit.vue'
+
 import { Edit } from 'lucide-vue-next'
 
 const props = defineProps({
@@ -118,7 +118,8 @@ const props = defineProps({
     required: true
   }
 })
-const showModaledit = ref(false);
+
+defineEmits(['edit'])
 
 const formatDate = (date) => {
   const formatted = new Date(date).toLocaleDateString('en-GB', {

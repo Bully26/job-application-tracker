@@ -10,7 +10,7 @@
             @click.stop>
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 class="text-xl font-semibold text-gray-900">Edit Application</h2>
+              <h2 class="text-xl font-semibold text-gray-900">Edit Application {{editdata}}</h2>
               <button @click="closeModal" class="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
                 aria-label="Close modal">
                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,24 +107,32 @@
 </template>
 
 <script setup>
+import { data } from 'autoprefixer'
 import { ref, reactive, watch, onUnmounted } from 'vue'
-import Modeledit from '~/components/applications/Modeledit.vue'
 
 // Props
-const showModaledit = ref(false);
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    default: false
+  },
+ editdata :{
+    type: JSON,
+  }
+})
 
 // Emits
 const emit = defineEmits(['update:modelValue', 'submit'])
 
 // Reactive state
-const isOpen = ref(showModaledit);
+const isOpen = ref(props.modelValue)
 const formData = reactive({
-  company: '',
-  position: '',
-  stage: 'not_applied',
-  deadline: new Date().toISOString().split('T')[0],
-  url: '',
-  resume: ''
+  company: props.editdata.company,
+  position: props.editdata.position,
+  stage: props.editdata.stage,
+  deadline: props.editdata.deadline,
+  url: props.editdata.url,
+  resume: props.editdata.resume
 })
 
 // Watch for prop changes
@@ -198,6 +206,25 @@ watch(isOpen, (newVal) => {
     document.body.style.overflow = 'auto'
   }
 })
+
+watch(
+  () => props.editdata,
+  (newData) => {
+    if (newData && Object.keys(newData).length > 0) {
+      formData.company = newData.company || ''
+      formData.position = newData.position || ''
+      formData.stage = newData.stage || 'not_applied'
+      formData.deadline = newData.deadline
+        ? new Date(newData.deadline).toISOString().split('T')[0]
+        : ''
+      formData.url = newData.url || ''
+      formData.resume = newData.resume || ''
+    }
+  },
+  { immediate: true, deep: true }
+)
+
+
 
 // Cleanup on unmount
 onUnmounted(() => {
