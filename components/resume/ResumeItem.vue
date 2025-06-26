@@ -90,8 +90,6 @@ const deletefile = async()=>{
   alert('deletion initated');
   await useResumeStore().deleteResume(resume.name);
   await useResumeStore().getResume(true);
-
-  
 }
 
 function formatDate(isoString) {
