@@ -1,9 +1,8 @@
 <template>
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-    {{ showModal }}
     <div class="overflow-x-auto overflow-y-scroll">
       <table class="w-full">
-        <thead class="bg-gray-50">
+        <thead class="bg-gray-100">
           <tr>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Company
@@ -54,6 +53,10 @@ const showmod = (element) => {
   editval.value = element;
   showModal.value = true;
 
+}
+
+const onDragEnd = async ()=>{
+  await useJobStore().savePos();
 }
 
 </script>

@@ -37,9 +37,11 @@
     <div class="mt-6 flex items-center justify-between text-sm text-gray-500">
       <div>Showing {{ filteredApplications.length }} applications</div>
       <div class="flex space-x-4">
-        <span>Applied: {{ getStatusCount('Applied') }}</span>
-        <span>Interview: {{ getStatusCount('Interview') }}</span>
-        <span>Offered: {{ getStatusCount('Offered') }}</span>
+        <span>Not Applied: {{ getStatusCount('not_applied') }}</span>
+        <span>Applied: {{ getStatusCount('applied') }}</span>
+        <span>Interview: {{ getStatusCount('interview') }}</span>
+        <span>Offered: {{ getStatusCount('offered') }}</span>
+        
       </div>
     </div>
   </div>

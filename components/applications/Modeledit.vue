@@ -10,7 +10,7 @@
             @click.stop>
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 class="text-xl font-semibold text-gray-900">Edit Application {{editdata}}</h2>
+              <h2 class="text-xl font-semibold text-gray-900">Edit Application {{props.editdata}}</h2>
               <button @click="closeModal" class="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
                 aria-label="Close modal">
                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,7 +20,7 @@
             </div>
 
             <!-- Modal Body -->
-            <form @submit.prevent="handleSubmit" class="p-6 space-y-6">
+            <form @submit.prevent="calledit" class="p-6 space-y-6">
               <!-- Company and Position Row -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -82,8 +82,7 @@
                 <label for="resumeVersion" class="block text-sm font-medium text-gray-700 mb-2">
                   Resume Url
                 </label>
-                <input id="resumeVersion" v-model="formData.resume" type="url"
-                  placeholder="Resume template name"
+                <input id="resumeVersion" v-model="formData.resume" type="url" placeholder="Resume template name"
                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200" />
               </div>
 
@@ -93,9 +92,9 @@
                   class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
                   Cancel
                 </button>
-                <button type="submit"
+                <button type="submit" @click="calledit"
                   class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200">
-                  Add Application
+                  Save
                 </button>
               </div>
             </form>
@@ -116,7 +115,7 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
- editdata :{
+  editdata: {
     type: JSON,
   }
 })
@@ -140,6 +139,8 @@ watch(() => props.modelValue, (newVal) => {
   isOpen.value = newVal
 })
 
+
+
 // Watch for local changes
 watch(isOpen, (newVal) => {
   emit('update:modelValue', newVal)
@@ -148,6 +149,11 @@ watch(isOpen, (newVal) => {
 // Methods
 const closeModal = () => {
   isOpen.value = false
+}
+
+const calledit = async () => {
+  await useJobStore().editjob(formData, props.editdata);
+  closeModal()
 }
 
 const resetForm = () => {
@@ -159,35 +165,35 @@ const resetForm = () => {
   formData.resume = ''
 }
 
-onMounted(()=>{
- 
+onMounted(() => {
+
 
 })
 
-const handleSubmit = async () => {
-  // Validate required fields
-  if (!formData.company.trim() || !formData.position.trim()) {
-    alert('Please fill in all required fields.')
-    return
-  }
-  
-  // adding the form to supa base data base
-  await useJobStore().addjob({
-    company: formData.company,
-    position: formData.position,
-    stage: formData.stage,
-    deadline: formData.deadline
-      ? new Date(formData.deadline).toISOString()
-      : null,
-    url: formData.url,
-    resume: formData.resume,
-  });
-  // await useJobStore().fetchApplications();
+// const handleSubmit = async () => {
+//   // Validate required fields
+//   if (!formData.company.trim() || !formData.position.trim()) {
+//     alert('Please fill in all required fields.')
+//     return
+//   }
 
-  // Reset form and close modal
-  resetForm()
-  closeModal()
-}
+//   // adding the form to supa base data base
+//   await useJobStore().addjob({
+//     company: formData.company,
+//     position: formData.position,
+//     stage: formData.stage,
+//     deadline: formData.deadline
+//       ? new Date(formData.deadline).toISOString()
+//       : null,
+//     url: formData.url,
+//     resume: formData.resume,
+//   });
+//   // await useJobStore().fetchApplications();
+
+//   // Reset form and close modal
+//   resetForm()
+//   closeModal()
+// }
 
 // Handle escape key
 const handleEscape = (event) => {
