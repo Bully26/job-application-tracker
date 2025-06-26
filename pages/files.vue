@@ -9,12 +9,14 @@
         </div>
         <p class="text-gray-600">Manage your documents and attachments</p>
       </div>
-      <button @click="showUploadModal = true"
-        class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center">
-        <ArrowUpTrayIcon class="w-4 h-4 mr-2" />
-        Upload File
-        <input type="file" class="hidden">
-      </button>
+      <div class="flex  space-x-3">
+        <input id="fileInput" type="file"
+          class="cursor-pointer  border border-gray-300 text-gray-700 px-4 py-2 rounded-lg  transition-colors flex items-center bg-white" />
+        <label @click="upload"
+          class="cursor-pointer  border border-gray-300 text-gray-700 px-4 py-2 rounded-lg  transition-colors flex items-center w-full bg-blue-200">
+          <ArrowUpTrayIcon class="w-4 h-4 " />
+        </label>
+      </div>
     </div>
 
     <!-- File Grid -->
@@ -33,7 +35,7 @@
             <button class="text-gray-400 hover:text-gray-600 p-1" @click="download(file)">
               <ArrowDownTrayIcon class="w-4 h-4" />
             </button>
-            <button @click="seefile" class="text-gray-400 hover:text-gray-600 p-2">
+            <button @click="seefile(file)" class="text-gray-400 hover:text-gray-600 p-2">
               <EyeIcon class="w-4 h-4" />
             </button>
             <button class="text-gray-400 hover:text-red-600 p-1" @click="deletefile(file)">
@@ -75,20 +77,32 @@ const showUploadModal = ref(false)
 
 
 onMounted(async () => {
-   await usefileStore().getfile();
+  await usefileStore().getfile();
 })
-const files=computed(()=>{
+const files = computed(() => {
   return usefileStore().file;
 })
 
-
-const deletefile = async (fileobj)=>{
-   await usefileStore().deletefile(fileobj.name);
+const seefile = async (fileobj)=>{
+  const url = await usefileStore().getfileUrl(fileobj.name);
+  navigateTo(url,{external:true});
 }
 
-const download = async (fileobj)=>{
+
+const deletefile = async (fileobj) => {
+  await usefileStore().deletefile(fileobj.name);
+}
+
+const download = async (fileobj) => {
   await usefileStore().downloadFile(fileobj.name);
 }
+const upload = async () => {
+    const input = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+    await usefileStore().uploadfile(file);
+    fileInput.value = '';
+    await usefileStore().getfile(true);
+};
 
 
 

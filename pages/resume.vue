@@ -5,16 +5,14 @@
     <PageHeader title="Resume Management" description="Manage your resumes and track their performance"
       :icon="DocumentIcon">
       <template #actions>
-        <div class="flex space-x-3">
-          <label :class="hasFile? 'bg-blue-400 hover:bg-blue-500' : 'bg-white hover:bg-gray-50'" 
-           @click="canup"
-          class="cursor-pointer  border border-gray-300 text-gray-700 px-4 py-2 rounded-lg  transition-colors flex items-center">
-            <ArrowUpTrayIcon class="w-4 h-4 mr-2" />
-            {{ filehandle }}
-            <input id="fileInput" type="file"  class="hidden" 
-            :class="hasFile?'pointer-events:none':''"
-            @click="upload"
+        <div class="flex  space-x-3">
+          <input id="fileInput" type="file" 
+           class="cursor-pointer  border border-gray-300 text-gray-700 px-4 py-2 rounded-lg  transition-colors flex items-center bg-white"
             />
+            <label 
+           @click="upload"
+          class="cursor-pointer  border border-gray-300 text-gray-700 px-4 py-2 rounded-lg  transition-colors flex items-center w-full bg-blue-200">
+            <ArrowUpTrayIcon class="w-4 h-4 " />
           </label>
         </div>
       </template>
@@ -91,7 +89,7 @@ import PageHeader from '~/components/ui/PageHeader.vue'
 import StatCard from '~/components/ui/StatCard.vue'
 import ResumeList from '~/components/resume/ResumeList.vue'
 import { get } from '@vueuse/core'
-import { FoldHorizontal, TruckElectric } from 'lucide-vue-next'
+import { FoldHorizontal, TruckElectric, Upload } from 'lucide-vue-next'
 
 const showUploadModal = ref(false)
 const showCreateModal = ref(false)
@@ -109,21 +107,12 @@ const filehandle= computed(() => {
   return !hasFile.value?'Click to upload':'Upload'
 });
 
-function canup() {
-  if(hasFile.value)upload();
-  return;
-}
 const upload = async () => {
-  if(hasFile.value==true)
-  {
     const input = document.getElementById('fileInput');
     const file = fileInput.files[0];
     await useResumeStore().uploadfile(file);
+    await useResumeStore().getResume(true);
     fileInput.value = '';
-    hasFile.value=false;
-    return;
-  }
-  hasFile.value=true;
 };
 definePageMeta({
   layout: 'new',

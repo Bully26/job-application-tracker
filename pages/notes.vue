@@ -7,7 +7,7 @@
       :icon="DocumentTextIcon"
     >
       <template #actions>
-        <button 
+      <button 
           @click="showCreateForm = true"
           class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center"
         >
@@ -31,6 +31,11 @@
       @create="createNote"
       @cancel="cancelCreate"
     />
+    <viewNote
+    v-if="openNote && showview"
+    :notedata="openNote"
+    @cancel="cancelview"
+    />
 
     <!-- Notes Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -38,9 +43,7 @@
         v-for="note in filteredNotes"
         :key="note.id"
         :note="note"
-        @select="selectNote"
-        @edit="editNote"
-        @delete="deleteNote"
+        @click="showview=true;openNote=note;"
       />
     </div>
 
@@ -65,52 +68,41 @@ import { DocumentTextIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import PageHeader from '~/components/ui/PageHeader.vue'
 import SearchInput from '~/components/ui/SearchInput.vue'
 import CreateNoteForm from '~/components/notes/CreateNoteForm.vue'
+import viewNote from '~/components/notes/viewNote.vue'
 import NoteCard from '~/components/notes/NoteCard.vue'
+
 
 definePageMeta({
   layout:'default'
 })
 
+onMounted(async ()=>{
+  await useNoteStore().fetchnote();
+})
+
+const notes = computed(()=>useNoteStore().note);
 const showCreateForm = ref(false)
+const showview=ref(false)
 const searchQuery = ref('')
+const openNote=ref('')
 
 
-
-const notes = ref([
-  {
-    id: 1,
-    title: 'Interview Preparation for Tech Companies',
-    content: 'Research the company background, prepare answers for common questions, review technical concepts...',
-    tags: ['interview', 'techcorp', 'preparation'],
-    updatedAt: new Date('2024-01-15'),
-    createdAt: new Date('2024-01-15')
-  },
-  {
-    id: 2,
-    title: 'Networking Event Notes',
-    content: 'Met John from StartupXYZ - interested in frontend developers. Follow up next week...',
-    tags: ['networking', 'contacts', 'frontend'],
-    updatedAt: new Date('2024-01-12'),
-    createdAt: new Date('2024-01-12')
-  },
-  {
-    id: 3,
-    title: 'Salary Negotiation Tips',
-    content: 'Research market rates, prepare justification for higher salary, practice negotiation scenarios...',
-    tags: ['salary', 'negotiation', 'tips'],
-    updatedAt: new Date('2024-01-08'),
-    createdAt: new Date('2024-01-08')
-  }
-])
 
 const filteredNotes = computed(() => {
-  if (!searchQuery.value) return notes.value
-  return notes.value.filter(note => 
-    note.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    note.content.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    note.tags.some(tag => tag.toLowerCase().includes(searchQuery.value.toLowerCase()))
-  )
-})
+  if (!searchQuery.value.trim()) return notes.value;
+
+  const q = searchQuery.value.toLowerCase();
+
+  return notes.value.filter(note => {
+    const titleMatch = note.title?.toLowerCase().includes(q);
+    const contentMatch = note.content?.toLowerCase().includes(q);
+    const tagsMatch = note.tags?.toLowerCase().includes(q);
+
+    return titleMatch || contentMatch || tagsMatch;
+  });
+});
+
+
 
 const createNote = (noteData) => {
   const note = {
@@ -126,6 +118,9 @@ const createNote = (noteData) => {
 
 const cancelCreate = () => {
   showCreateForm.value = false
+}
+const cancelview = () => {
+  showview.value = false
 }
 
 const editNote = (note) => {

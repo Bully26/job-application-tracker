@@ -7,25 +7,19 @@
       <h3 class="font-semibold text-gray-900 flex-1">{{ note.title }}</h3>
       <div class="flex space-x-1">
         <button 
-          @click.stop="$emit('edit', note)"
-          class="text-gray-400 hover:text-gray-600"
-        >
-          <PencilIcon class="w-4 h-4" />
-        </button>
-        <button 
           @click.stop="$emit('delete', note.id)"
-          class="text-gray-400 hover:text-red-600"
+          class="text-gray-400 hover:text-red-600 pl-1"
         >
-          <TrashIcon class="w-4 h-4" />
+          <TrashIcon  @click="del" class="w-4 h-4" />
         </button>
       </div>
     </div>
     <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ note.content }}</p>
     <div class="flex flex-wrap gap-2 mb-3">
       <span 
-        v-for="tag in note.tags" 
+        v-for="tag in viewtag" 
         :key="tag"
-        class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full"
+        class="px-2 py-1 bg-slate-500 text-white text-xs rounded-full"
       >
         {{ tag }}
       </span>
@@ -39,20 +33,30 @@
 <script setup>
 import { PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 
-defineProps({
+const props = defineProps({
   note: {
     type: Object,
     required: true
   }
 })
 
-defineEmits(['select', 'edit', 'delete'])
+const viewtag = computed(()=>{
+  return props.note.tags.split(',').map(tag => tag.trim()).filter(Boolean);
+})
 
+
+defineEmits(['select', 'edit', 'delete'])
 const formatDate = (date) => {
   return new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric'
   }).format(date)
+}
+
+const del = async ()=>{
+  await useNoteStore().deletenote(props.note);
+  await useNoteStore().fetchnote(true);
+
 }
 </script>

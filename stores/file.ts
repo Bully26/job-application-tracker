@@ -5,7 +5,7 @@ export const usefileStore = defineStore('file', () => {
   const file = ref([]);
 
 
-  const getfile = async (again) => {
+  const getfile = async (again:false) => {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     const userid = user?.id;
     if (userError || !userid) {

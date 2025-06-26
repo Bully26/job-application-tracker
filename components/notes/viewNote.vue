@@ -1,6 +1,7 @@
 <template>
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-    <h3 class="text-lg font-semibold text-gray-900 mb-4">Create New Note</h3>
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Viewing Notes
+    </h3>
 
     <form @submit.prevent>
       <div class="space-y-4">
@@ -47,11 +48,13 @@ import { reactive } from 'vue'
 
 const supabase = useSupabaseClient();
 
-const form = reactive({
-  title: '',
-  content: '',
-  tags: ''
+const props = defineProps({
+  notedata:{
+    type:JSON,
+    require:true
+  }
 })
+const form = reactive({...props.notedata});
 
 const note = ref("x");
 const oncesubmit = ref(false);
@@ -59,21 +62,11 @@ const oncesubmit = ref(false);
 const emit = defineEmits(['create', 'cancel'])
 
 const handleSubmit = async () => {
-
   if (!form.title.trim() || !form.content.trim()) {
     oncesubmit.value=true;
     return; 
   }
-  note.value = {
-    title: form.title,
-    content: form.content,
-    tags: form.tags
-  }
   emit('cancel');
-  await useNoteStore().addnote(note.value);
-
-  form.title = ''
-  form.content = ''
-  form.tags = ''
+  await useNoteStore().updatenote(form,props.notedata);
 }
 </script>
