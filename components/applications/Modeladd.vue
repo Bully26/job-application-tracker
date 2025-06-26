@@ -178,6 +178,8 @@ const handleSubmit = async () => {
     url: formData.url,
     resume: formData.resume,
   });
+
+  useJobStore().savePos();
   // await useJobStore().fetchApplications();
 
   // Reset form and close modal

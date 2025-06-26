@@ -20,7 +20,6 @@
     <Model
       v-model="showModal" 
     /> 
-
     <!-- Search -->
     <div class="mb-6">
       <SearchInput 
@@ -30,8 +29,12 @@
     </div>
 
     <!-- Applications Table -->
-    <ApplicationsTable
+    <ApplicationsTable v-if="!searchQuery"
     />
+    <ApplicationsTableSearch v-if="searchQuery"
+    :keyword="searchQuery"
+    />
+    
 
     <!-- Summary -->
     <div class="mt-6 flex items-center justify-between text-sm text-gray-500">
@@ -53,6 +56,7 @@ import { ClipboardDocumentListIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import PageHeader from '~/components/ui/PageHeader.vue'
 import SearchInput from '~/components/ui/SearchInput.vue'
 import ApplicationsTable from '~/components/applications/ApplicationsTable.vue'
+import ApplicationsTableSearch from '~/components/applications/ApplicationTableSearch.vue'
 import Model from '~/components/applications/Modeladd.vue'
 
 const showAddModal = ref(false)
