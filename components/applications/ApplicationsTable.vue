@@ -30,7 +30,7 @@
         <Draggable v-model="applications" item-key="id" class="drag-area w-full" @end="onDragEnd" tag="tbody"
           v-auto-animate>
           <template #item="{ element }">
-            <ApplicationRow :key="element.id" :application="element" v-on:edit="showmod" />
+            <ApplicationRow :key="element.id" :application="element" v-on:edit="showmod" class="border-y-4 border-slate-200" />
           </template>
         </Draggable>
       </table>

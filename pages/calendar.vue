@@ -1,72 +1,29 @@
 <template>
-  <div>
+  <div class="flex flex-col">
     <!-- Header -->
     <PageHeader
       title="Calendar"
       description="Schedule and track your interviews and deadlines"
       :icon="CalendarIcon"
     >
-      <template #actions>
-        <button 
-          @click="showAddEventModal = true"
-          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center"
-        >
-          <PlusIcon class="w-4 h-4 mr-2" />
-          Add Event
-        </button>
-      </template>
+    
     </PageHeader>
 
-    <!-- Calendar Navigation -->
-    <div class="flex items-center justify-between mb-6">
-      <div class="flex items-center space-x-4">
-        <button 
-          @click="previousMonth"
-          class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          <ChevronLeftIcon class="w-5 h-5" />
-        </button>
-        <h2 class="text-xl font-semibold text-gray-900">
-          {{ currentMonthYear }}
-        </h2>
-        <button 
-          @click="nextMonth"
-          class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-        >
-          <ChevronRightIcon class="w-5 h-5" />
-        </button>
-      </div>
-      <div class="flex space-x-2">
-        <button 
-          @click="viewMode = 'month'"
-          class="px-3 py-2 text-sm rounded-lg transition-colors"
-          :class="viewMode === 'month' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100'"
-        >
-          Month
-        </button>
-        <button 
-          @click="viewMode = 'week'"
-          class="px-3 py-2 text-sm rounded-lg transition-colors"
-          :class="viewMode === 'week' ? 'bg-blue-100 text-blue-700' : 'text-gray-600 hover:bg-gray-100'"
-        >
-          Week
-        </button>
-      </div>
-    </div>
-
-    <!-- Calendar Grid -->
-    <CalendarGrid
-      :current-date="currentDate"
-      :events="events"
-      @select-date="selectDate"
+     <div style="height: 800px;">
+    <vue-cal
+      style="height: 100%;"
+      default-view="month"
+      :events="jobevent"
+      event-overlap-mode="stack"
+      hide-view-selector
+      class="vuecal"
+      @event-click="onEventClick"
+      :views="['month']"
+      :theme="false"
+      hide-navigation
     />
-
-    <!-- Upcoming Events -->
-    <UpcomingEvents
-      :events="upcomingEvents"
-      @edit="editEvent"
-      @delete="deleteEvent"
-    />
+  </div>
+    
   </div>
 </template>
 
@@ -74,82 +31,165 @@
 import { ref, computed } from 'vue'
 import { CalendarIcon, PlusIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import PageHeader from '~/components/ui/PageHeader.vue'
-import CalendarGrid from '~/components/calendar/CalendarGrid.vue'
-import UpcomingEvents from '~/components/calendar/UpcomingEvents.vue'
+import VueCal from 'vue-cal'
+import 'vue-cal/dist/vuecal.css'
 
-const showAddEventModal = ref(false)
-const viewMode = ref('month')
-const currentDate = ref(new Date())
 
-const events = ref([
+const events = [
   {
-    id: 1,
-    title: 'Google Interview',
-    company: 'Google',
-    type: 'interview',
-    date: new Date('2025-01-15'),
-    time: '10:00 AM'
+    start: '2025-07-01',
+    end: '2025-07-01',
+    title: 'Google Internship Deadline',
+    content: 'Submit resume & cover letter',
+    class: 'deadline-event'
   },
   {
-    id: 2,
-    title: 'Apple Application Deadline',
-    company: 'Apple',
-    type: 'deadline',
-    date: new Date('2025-01-20'),
-    time: '11:59 PM'
+    start: '2025-07-10',
+    end: '2025-07-10',
+    title: 'Microsoft SDE Assessment',
+    content: 'Complete assessment',
+    class: 'deadline-event green-event'
   },
   {
-    id: 3,
-    title: 'Netflix Follow-up',
-    company: 'Netflix',
-    type: 'followup',
-    date: new Date('2025-01-18'),
-    time: '2:00 PM'
+    start: '2025-07-10',
+    end: '2025-07-10',
+    title: 'Microsoft Assessment',
+    content: 'Technical round',
+    class: 'deadline-event red-event'
   },
   {
-    id: 4,
-    title: 'Microsoft Technical Interview',
-    company: 'Microsoft',
-    type: 'interview',
-    date: new Date('2025-01-22'),
-    time: '3:00 PM'
+    start: new Date(),
+    end: new Date(new Date().getTime() + 60 * 60 * 1000),
+    id: 'event-1',
+    title: 'Meeting with Alice',
+    draggable: true,
+    resizable: true,
+    deletable: true,
+    allDay: false,
+    recurring: { frequency: 'week', amount: 1, start: new Date() },
+    class: 'meeting'
   }
-])
+]
 
-const currentMonthYear = computed(() => {
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'long',
-    year: 'numeric'
-  }).format(currentDate.value)
+const jobdata = ref([]);
+
+onMounted(async ()=>{
+  const fetched = await useJobStore().fetchApplications();
+  jobdata.value = [...fetched].sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
 })
 
-const upcomingEvents = computed(() => {
-  const today = new Date()
-  return events.value
-    .filter(event => event.date >= today)
-    .sort((a, b) => a.date - b.date)
-    .slice(0, 5)
+watch(()=>useJobStore().applications,async ()=>{
+  const fetched = await useJobStore().fetchApplications();
+  jobdata.value = [...fetched].sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
 })
 
-const previousMonth = () => {
-  currentDate.value = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() - 1, 1)
-}
+const jobevent = computed(()=>{
+  
+  let ary= [];
 
-const nextMonth = () => {
-  currentDate.value = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() + 1, 1)
-}
+  let index=0;
 
-const selectDate = (date) => {
-  console.log('Selected date:', date)
-}
+   // dates.sort((a, b) => new Date(a) - new Date(b));
+  jobdata.value.forEach(element => {
+    //   start: '2025-07-10',
+    // end: '2025-07-10',
+    // title: 'Microsoft Assessment',
+    // content: 'Technical round',
+    // class: 'deadline-event red-event'
+   
+    let obj ={};
+    obj.start= element.deadline ;
+    obj.end  =element.deadline ;
+    obj.title=element.company.toUpperCase();
+    obj.content=element.position;
+    obj.class= index%2==0?'deadline-event green-event':'deadline-event red-event';
+    index+=1;
+    ary.push(obj);
+  });
 
-const editEvent = (event) => {
-  console.log('Edit event:', event)
-}
+  return ary;
+})
 
-const deleteEvent = (event) => {
-  if (confirm('Are you sure you want to delete this event?')) {
-    events.value = events.value.filter(e => e.id !== event.id)
-  }
-}
+
 </script>
+
+<style>
+.vuecal {
+  --vuecal-primary-color: #f32929;
+  --vuecal-secondary-color: #2e2e2e;
+  --vuecal-base-color: #ffffff;
+  --vuecal-contrast-color: #000000;
+  --vuecal-border-color: color-mix(in srgb, var(--vuecal-base-color) 8%, transparent);
+  --vuecal-header-color: var(--vuecal-base-color);
+  --vuecal-event-color: var(--vuecal-base-color);
+  --vuecal-event-border-color: currentColor;
+  --vuecal-border-radius: 6px;
+  --vuecal-height: 500px;
+  --vuecal-min-schedule-width: 0px;
+  --vuecal-min-cell-width: 0px;
+  --vuecal-transition-duration: 0.25s;
+}
+
+/* Day number styling */
+.vuecal__cell-date {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  font-size: 0.75rem;
+  color: #aaa;
+}
+
+/* Cell padding */
+.vuecal__cell {
+  position: relative;
+  padding: 6px;
+}
+
+/* Main event appearance */
+.vuecal__event {
+  display: block;
+  font-size: 0.75rem;
+  margin-bottom: 2px;
+  padding: 2px 4px;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+/* Event colors */
+.deadline-event {
+  background-color: #fd6e6c;
+}
+
+.deadline-event.green-event {
+  background-color: rgb(19, 143, 19);
+  
+}
+
+.deadline-event.red-event {
+  background-color: rgb(228, 51, 51);
+}
+
+.meeting {
+  background-color: #0113ad;
+}
+
+/* "1" badge count styling */
+.vuecal__cell-events-count {
+  background-color: #ff0000 ;
+  color: white ;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  min-width: 40px;
+  min-height: 24px;
+  text-align: center;
+  line-height: 1.2;
+  display: inline-block;
+}
+</style>

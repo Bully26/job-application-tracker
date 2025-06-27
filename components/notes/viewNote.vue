@@ -1,13 +1,10 @@
 <template>
   <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-    <h3 class="text-lg font-semibold text-gray-900 mb-4">Viewing Notes
-    </h3>
-
     <form @submit.prevent>
       <div class="space-y-4">
         <div>
           <input v-model="form.title" type="text" placeholder="Note title..."
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            class="w-full px-3 py-2  rounded-lg  outline-none focus:outline-none focus:border-none text-3xl text-500 font-semibold"
            >
             <div class="text-red-500 mt-1 ml-1" v-if="form.title=='' && oncesubmit">
               required
@@ -15,7 +12,7 @@
         </div>
         <div>
           <textarea v-model="form.content" placeholder="Write your note content here..." rows="4"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            class="w-full px-3 py-2  rounded-lg  outline-none focus:outline-none focus:border-none text-xl"
           ></textarea>
              <div class="text-red-500 mt-1 ml-1"
              v-if="form.content=='' && oncesubmit"

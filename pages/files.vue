@@ -13,8 +13,8 @@
         <input id="fileInput" type="file"
           class="cursor-pointer  border border-gray-300 text-gray-700 px-4 py-2 rounded-lg  transition-colors flex items-center bg-white" />
         <label @click="upload"
-          class="cursor-pointer  border border-gray-300 text-gray-700 px-4 py-2 rounded-lg  transition-colors flex items-center w-full bg-blue-200">
-          <ArrowUpTrayIcon class="w-4 h-4 " />
+          class="cursor-pointer  border border-gray-300 text-gray-700 px-4 py-2 rounded-lg  transition-colors flex items-center w-full bg-blue-600">
+          <ArrowUpTrayIcon class="w-4 h-4 text-white " />
         </label>
       </div>
     </div>

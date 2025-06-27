@@ -1,6 +1,6 @@
 <template>
-  <tr class="hover:bg-blue-100 transition-colors ">
-    <td class="px-6 py-4 whitespace-nowrap">
+  <tr class="hover:bg-blue-100 transition-colors">
+    <td class="px-6 py-4 whitespace-nowrap ">
       <div class="font-medium text-gray-900">{{ application.company }}</div>
     </td>
     <td class="px-6 py-4 whitespace-nowrap">
