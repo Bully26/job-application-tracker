@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <!-- Mobile menu button -->dawd
+    <!-- Mobile menu button -->
     <div class="lg:hidden fixed top-4 left-4 z-50">
       <button
         @click="sidebarOpen = !sidebarOpen"
@@ -14,11 +14,11 @@
 
     <!-- Sidebar -->
     <div 
-      class="fixed inset-y-0 left-0 z-40 w-64 bg-slate-50 border-r-2 transition-transform duration-300 lg:translate-x-0"
+      class="fixed inset-y-0 left-0 z-40 w-64 bg-slate-50 border-r-4 border-slate-300  transition-transform duration-300 lg:translate-x-0"
       :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <!-- Logo -->
-      <div class="flex items-center px-6 py-4 border-b border-gray-700">
+      <div class="flex items-center px-6 py-4 border-b-4 border-gray-300">
         <div class="flex items-center">
           <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
             <span class=" font-bold text-sm text-black">JAT</span>
@@ -34,7 +34,7 @@
       <nav class="mt-8">
         <NuxtLink 
           to="/profile" 
-          class="sidebar-item"
+          class="sidebar-item  "
           :class="{ active: $route.path === '/profile' }"
         >
           <UserIcon class="w-5 h-5 mr-3" />
@@ -43,7 +43,7 @@
         
         <NuxtLink 
           to="/applications" 
-          class="sidebar-item"
+          class="sidebar-item "
           :class="{ active: $route.path === '/applications' }"
         >
           <ClipboardDocumentListIcon class="w-5 h-5 mr-3" />
@@ -52,7 +52,7 @@
         
         <NuxtLink 
           to="/files" 
-          class="sidebar-item"
+          class="sidebar-item "
           :class="{ active: $route.path === '/files' }"
         >
           <FolderIcon class="w-5 h-5 mr-3" />
@@ -61,7 +61,7 @@
         
         <NuxtLink 
           to="/notes" 
-          class="sidebar-item"
+          class="sidebar-item "
           :class="{ active: $route.path === '/notes' }"
         >
           <DocumentTextIcon class="w-5 h-5 mr-3" />
@@ -79,7 +79,7 @@
         
         <NuxtLink 
           to="/calendar" 
-          class="sidebar-item"
+          class="sidebar-item "
           :class="{ active: $route.path === '/calendar' }"
         >
           <CalendarIcon class="w-5 h-5 mr-3" />

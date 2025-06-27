@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
     <div class="flex items-center">
-      <DocumentIcon class="w-8 h-8 text-gray-400 mr-4" />
+     <component :is="fileIcon" class="w-8 h-8 text-gray-500 mr-4" />
       <div>
         <div class="flex items-center">
           <span 
@@ -18,13 +18,8 @@
             class="font-medium text-gray-900 mr-2 border-0 outline-none bg-transparent focus:bg-white focus:border focus:border-blue-500 focus:rounded px-2 py-1"
             :class="{ 'bg-blue-50 border border-blue-300 rounded px-2 py-1': resume.editing }"
           >
-          <button 
-            v-if="!resume.editing"
-            @click="$emit('edit-name', resume)"
-            class="text-gray-400 hover:text-gray-600 p-1"
-          >
-            <PencilIcon class="w-4 h-4" />
-          </button>
+         
+          
           <span 
             v-if="resume.isPrimary"
             class="bg-gray-800 text-white px-2 py-1 rounded text-xs font-medium"
@@ -68,6 +63,14 @@
 
 <script setup>
 import { DocumentIcon, PencilIcon, ArrowDownTrayIcon, EyeIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import {
+  DocumentTextIcon,
+  PhotoIcon,
+  FilmIcon,
+  ArchiveBoxIcon,
+  CubeIcon,
+  PresentationChartBarIcon
+} from '@heroicons/vue/24/outline'
 
 const { resume } = defineProps({
   resume: {
@@ -101,6 +104,38 @@ function formatDate(isoString) {
   return `${day} ${month} ${year}`
 }
 
+const fileIcon = computed(() => {
+  const ext = resume.name.split('.').pop().toLowerCase()
+  switch (ext) {
+    case 'pdf':
+      return DocumentTextIcon
+    case 'doc':
+    case 'docx':
+      return PencilIcon
+    case 'png':
+    case 'jpg':
+    case 'jpeg':
+    case 'gif':
+      return PhotoIcon
+    case 'mp4':
+    case 'mov':
+    case 'avi':
+      return FilmIcon
+    case 'zip':
+    case 'rar':
+    case '7z':
+      return ArchiveBoxIcon
+    case 'ppt':
+    case 'pptx':
+      return PresentationChartBarIcon
+    case 'json':
+    case 'js':
+    case 'html':
+      return CubeIcon
+    default:
+      return DocumentIcon
+  }
+})
 
 
 

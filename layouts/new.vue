@@ -13,12 +13,12 @@
     </div>
 
     <!-- Sidebar -->
-    <div 
-      class="fixed inset-y-0 left-0 z-40 w-64 bg-slate-50 border-r-2 transition-transform duration-300 lg:translate-x-0"
+     <div 
+      class="fixed inset-y-0 left-0 z-40 w-64 bg-slate-50 border-r-4 border-slate-300 transition-transform duration-300 lg:translate-x-0"
       :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <!-- Logo -->
-      <div class="flex items-center px-6 py-4 border-b border-gray-700">
+      <div class="flex items-center px-6 py-4  border-b-4 border-slate-300">
         <div class="flex items-center">
           <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
             <span class=" font-bold text-sm text-black">JAT</span>

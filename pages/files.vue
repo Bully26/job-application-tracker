@@ -3,6 +3,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between mb-8">
       <div>
+        
         <div class="flex items-center mb-2">
           <FolderIcon class="w-6 h-6 text-gray-600 mr-3" />
           <h1 class="text-2xl font-bold text-gray-900">Files</h1>
@@ -18,14 +19,18 @@
         </label>
       </div>
     </div>
+    <div class="mb-6">
+      <SearchInput v-model="searchQuery" placeholder="Search applications..." />
+    </div>
+
 
     <!-- File Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      <div v-for="file in files" :key="file.id"
+      <div v-for="file in searched" :key="file.id"
         class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow cursor-pointer">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center">
-            <DocumentIcon class="w-8 h-8 text-blue-600 mr-3" />
+            <component :is="getFileIcon(file.name).icon" :class="['w-8 h-8 ', getFileIcon(file.name).color]" />
             <div>
               <h3 class="font-medium text-gray-900 text-sm">{{ file.name }}</h3>
               <p class="text-xs text-gray-500">{{ file.size }}</p>
@@ -43,9 +48,16 @@
             </button>
           </div>
         </div>
-        <div class="text-xs text-gray-500">
-          Uploaded {{ formatDate(file.uploadedAt) }}
+
+        <div class="flex gap-2">
+          <div class="text-xs text-gray-500">
+          Uploaded: {{ formatDate(file.uploadedAt) }}
         </div>
+        <div class="text-xs text-gray-500">
+          Size: {{ bytesToKB( file.metadata.size) }}
+        </div>
+        </div>
+        
       </div>
     </div>
 
@@ -70,10 +82,20 @@ import {
   ArrowUpTrayIcon,
   ArrowDownTrayIcon,
   TrashIcon,
-  EyeIcon
+  EyeIcon,
+  PhotoIcon,
+  VideoCameraIcon,
+  DocumentTextIcon,
+  ArchiveBoxIcon,
+  DocumentArrowDownIcon,
+  PresentationChartBarIcon,
+  CodeBracketIcon,
+  ExclamationTriangleIcon
 } from '@heroicons/vue/24/outline'
+import SearchInput from '~/components/ui/SearchInput.vue'
 
 const showUploadModal = ref(false)
+const searchQuery = ref('');
 
 
 onMounted(async () => {
@@ -83,9 +105,21 @@ const files = computed(() => {
   return usefileStore().file;
 })
 
+const searched= computed(()=>{
+  return files.value.filter(file =>
+    file.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+
+})
+
 const seefile = async (fileobj)=>{
   const url = await usefileStore().getfileUrl(fileobj.name);
   navigateTo(url,{external:true});
+}
+
+function bytesToKB(bytes) {
+  const kb = bytes / 1024;
+  return `${kb.toFixed(2)} kb`;
 }
 
 
@@ -112,5 +146,43 @@ const formatDate = (date) => {
     day: 'numeric',
     year: 'numeric'
   }).format(date)
+}
+
+const getFileIcon = (filename) => {
+  const ext = filename.split('.').pop().toLowerCase();
+
+  switch (ext) {
+    case 'pdf':
+      return { icon: DocumentTextIcon, color: 'text-red-600' };
+    case 'jpg':
+    case 'jpeg':
+    case 'png':
+    case 'gif':
+      return { icon: PhotoIcon, color: 'text-yellow-600' };
+    case 'mp4':
+    case 'mov':
+    case 'avi':
+      return { icon: VideoCameraIcon, color: 'text-purple-600' };
+    case 'zip':
+    case 'rar':
+      return { icon: ArchiveBoxIcon, color: 'text-gray-500' };
+    case 'ppt':
+    case 'pptx':
+      return { icon: PresentationChartBarIcon, color: 'text-orange-600' };
+    case 'doc':
+    case 'docx':
+      return { icon: DocumentIcon, color: 'text-blue-600' };
+    case 'xls':
+    case 'xlsx':
+      return { icon: DocumentArrowDownIcon, color: 'text-green-600' };
+    case 'js':
+    case 'html':
+    case 'css':
+    case 'vue':
+    case 'py':
+      return { icon: CodeBracketIcon, color: 'text-indigo-600' };
+    default:
+      return { icon: ExclamationTriangleIcon, color: 'text-gray-400' };
+  }
 }
 </script>
