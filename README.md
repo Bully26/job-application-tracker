@@ -49,6 +49,14 @@ Secure and seamless payment integration with Stripe. Users can upgrade plans via
 
 ![Stripe Checkout](./screenshots/checkout.png)
 
+---
+### 🗒️ Notes Section for Each Application
+
+Add custom notes to individual job applications — store interview questions, HR contacts, or personal reminders.
+
+
+![Note Section](./screenshots/note-section.png)
+
 ## 🧩 Tech Stack
 
 - **Nuxt 3** — Frontend and backend (API routes)
