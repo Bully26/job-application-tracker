@@ -22,7 +22,5 @@ export default defineNuxtConfig({
     exclude: ['/signup','/','/current'],
     saveRedirectToCookie: false,
   }
-   
-  },
- 
+  }
 })

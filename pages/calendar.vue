@@ -158,20 +158,21 @@ const jobevent = computed(()=>{
   text-overflow: ellipsis;
   white-space: nowrap;
   line-height: 1.2;
+  color: #000000;
 }
 
 /* Event colors */
 .deadline-event {
-  background-color: #fd6e6c;
+  background-color: #ffb2b0;
 }
 
 .deadline-event.green-event {
-  background-color: rgb(19, 143, 19);
+  background-color: rgb(79, 255, 79);
   
 }
 
 .deadline-event.red-event {
-  background-color: rgb(228, 51, 51);
+  background-color: rgb(255, 86, 86);
 }
 
 .meeting {

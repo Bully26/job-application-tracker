@@ -18,7 +18,7 @@
       :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
     >
       <!-- Logo -->
-      <div class="flex items-center px-6 py-4 border-b-4 border-gray-300">
+      <div class="flex items-center px-6 pt-4 ">
         <div class="flex items-center">
           <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
             <span class=" font-bold text-sm text-black">JAT</span>
@@ -28,6 +28,15 @@
             <p class=" text-xs text-black">TRACKER</p>
           </div>
         </div>
+      </div>
+      <div class="flex  px-6 py-4 border-b-4 border-slate-300 justify-center" @click="navigateTo('/payment')">
+        <div class="w-fit px-5 py-1 text-center rounded-sm text-2xl" :class="planclass">
+          {{checkplan()}}
+        </div>
+      </div>
+       
+      <div>
+      
       </div>
 
       <!-- Navigation -->
@@ -114,6 +123,40 @@ import {
   DocumentIcon,
   CalendarIcon
 } from '@heroicons/vue/24/outline'
+
+const  plan  = ref('User');
+
+const supabase = useSupabaseClient();
+
+onMounted(async()=>{
+   const { data: { user }, error: userError } = await supabase.auth.getUser();
+   const userid = user?.id;
+   const {data,error} = await supabase.from('user_main').select('plan').eq('client_id',userid);
+   plan.value=data[0].plan;
+})
+
+const checkplan = ()=>{
+    const dt = {
+      user:"Upgrade plan",
+      premium:"Premium",
+      king:"King"
+    }
+    return dt[plan.value];
+}
+
+const planclass=computed(()=>{
+    if(plan.value=='user')
+    {
+          return 'bg-slate-400';
+    }else if(plan.value=='premium'){
+
+          return 'bg-purple-400';
+
+    }else if(plan.value=='king'){
+           return 'bg-amber-500';
+    }
+});
+
 
 const sidebarOpen = ref(false)
 </script>

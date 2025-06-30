@@ -114,8 +114,6 @@ const upload = async () => {
     await useResumeStore().getResume(true);
     fileInput.value = '';
 };
-definePageMeta({
-  layout: 'new',
-})
+
 
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="text-2xl font-bold text-gray-900">{{ profile.name }}</h2>
-    <p class="text-gray-600 mb-4">{{ profile.title }}</p>
+    <p class="text-gray-600 mb-4">{{ profile.status }}</p>
     <div class="flex items-center space-x-6 text-sm text-gray-500">
       <div class="flex items-center">
         <EnvelopeIcon class="w-4 h-4 mr-1" />

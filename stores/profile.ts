@@ -8,8 +8,8 @@ export const useProfileStore = defineStore("profile", () => {
   const loading = ref(false);
   const error = ref(null);
 
-  const fetchProfile = async () => {
-    if (profile.value) return profile.value;
+  const fetchProfile = async (again) => {
+    if (profile.value && !again) return profile.value;
 
     loading.value = true;
     const { supabase } = useSupabase();
@@ -29,7 +29,7 @@ export const useProfileStore = defineStore("profile", () => {
         phone: data.phone || "your phone",
         location: data.location || "your location",
         bio: data.description || "your bio",
-        linkedin: data.links?.linkedin || "your linkedin",
+        linkedin: data.links || "your linkedin",
       };
     }
 
@@ -37,10 +37,36 @@ export const useProfileStore = defineStore("profile", () => {
     return profile.value;
   };
 
+  const saveProfile= async (form)=>{
+      const { supabase } = useSupabase();
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      const userid = user?.id;
+      const { data, error: fetchError } = await supabase
+      .from("user_profile")
+      .upsert({
+        client_id: userid,
+        name:form.name,
+        status:form.title,
+        email:form.email,
+        phone:form.phone,
+        location:form.location,
+        description:form.description,
+        links:form.linkedin
+
+      });
+      
+      if(error)
+      {
+        console.log('error  while editing profile',error);
+        return;
+      }
+  };
+
   return {
     profile,
     loading,
     error,
     fetchProfile,
+    saveProfile
   };
 });

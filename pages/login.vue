@@ -17,6 +17,9 @@
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600">
         Welcome back! Please enter your details.
+        <p class="text-red-400">
+          Oauth2 / magic link / emailotp is disabled for easy access
+        </p>
       </p>
     </div>
 
@@ -160,6 +163,14 @@ definePageMeta({
   layout: false,
 })
 
+
+const user = useSupabaseUser();
+
+watchEffect(() => {
+  if (user.value) {
+    navigateTo('/profile');
+  }
+});
 
 const form = reactive({
   email: '',

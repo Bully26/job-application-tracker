@@ -23,4 +23,13 @@ useSeoMeta({
   ogDescription: 'Organize your resumes, track applications, and monitor your job search progress all in one powerful platform.',
   twitterCard: 'summary_large_image',
 })
+
+const user = useSupabaseUser();
+
+watchEffect(() => {
+  if (user.value) {
+    navigateTo('/profile');
+  }
+});
+
 </script>

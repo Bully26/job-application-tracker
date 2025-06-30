@@ -5,11 +5,12 @@
       title="Profile"
       description="Manage your personal information and track your progress"
       :icon="ClipboardDocumentListIcon"
+
     >
       <template #actions>
         <button 
-          @click="editMode = !editMode"
           class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors flex items-center"
+          @click="navigateTo('/edit')"
         >
           <PencilIcon class="w-4 h-4 mr-2" />
           Edit Profile
@@ -20,13 +21,15 @@
     <!-- Profile Card -->
     <ProfileCard 
       :profile="profile" 
-      :edit-mode="editMode" 
+      v-if="profile"
+ 
     />
 
     <!-- Personal Information -->
     <PersonalInfo 
       :profile="profile" 
-      :edit-mode="editMode" 
+       v-if="profile"
+     
     />
 
     <!-- Statistics -->
@@ -60,24 +63,16 @@ definePageMeta({
  middleware: 'auth'
 })
 
-const editMode = ref(false)
-
-let profile = ref({
-  name: 'John Doe',
-  title: 'Software Engineer',
-  email: 'john.doe@email.com',
-  phone: '+1 (555) 123-4567',
-  location: 'San Francisco, CA',
-  bio: 'Passionate software engineer with 5+ years of experience in full-stack development. Experienced in React, Node.js, and cloud technologies.',
-  linkedin: 'linkedin.com/in/johndoe'
-})
 
 const stats = reactive({
   applicationsSent: 12,
   interviews: 5,
   offersReceived: 2
 })
+const profileStore = useProfileStore();
+const { profile } = storeToRefs(profileStore);
 onMounted(async () => {
-    profile.value = await useProfileStore().fetchProfile();
+  await profileStore.fetchProfile();
 })
+
 </script>
