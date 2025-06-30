@@ -1,75 +1,36 @@
-# Nuxt Minimal Starter
+# Job Application Tracker SaaS
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A modern SaaS platform to help users manage and track their job applications. Built with **Nuxt 3**, **Supabase**, and **Stripe**, this project integrates user authentication, subscription payments, and dynamic dashboards.
 
-## Setup
+---
 
-Make sure to install dependencies:
+## ✨ Features
 
-```bash
-# npm
-npm install
+- 🔐 Authentication via Supabase (email/password, with OAuth support)
+- 📋 CRUD operations for job applications
+- 📎 Upload and preview resumes (with download option)
+- 📅 Integrated calendar to manage application dates & interviews
+- 🧲 Drag-and-drop application prioritization based on job position
+- 💳 Subscription plans integrated with Stripe Checkout
+- 🔁 Stripe Webhook to update user plan/role post-payment
+- 📊 Responsive dashboard UI
+- ⚙️ Built with Nuxt 3 and H3 API routes
 
-# pnpm
-pnpm install
+---
 
-# yarn
-yarn install
+## 🧩 Tech Stack
 
-# bun
-bun install
-```
+- **Nuxt 3** — Frontend and backend (API routes)
+- **Supabase** — Database + Auth + Admin operations
+- **Stripe** — Payment and webhook management
+- **TypeScript** — Full type safety
 
-## Development Server
+---
 
-Start the development server on `http://localhost:3000`:
+## 🚀 Getting Started
 
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
+### 1. Clone the repository
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+git clone https://github.com/Bully26/JobApplicationTracker_Saas.git
+cd JobApplicationTracker_Saas
