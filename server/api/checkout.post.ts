@@ -30,8 +30,8 @@ export default defineEventHandler(async (event) => {
          clientId:body.client_id,  
      },
     mode: 'payment',
-    success_url: 'http://localhost:3000/profile',
-    cancel_url: 'http://localhost:3000/profile',
+    success_url: 'https://job-application-tracker-saas.vercel.app',
+    cancel_url: 'https://job-application-tracker-saas.vercel.app',
   })
   return { url: session.url }
 })
