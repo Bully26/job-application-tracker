@@ -17,14 +17,10 @@
         </div>
       </template>
     </PageHeader>
-
-    <!-- Statistics -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-      <StatCard :value="stats.totalResumes" label="Total Resumes" />
-      <StatCard :value="stats.totalDownloads" label="Total Downloads" value-class="text-green-600" />
-      <StatCard :value="stats.primaryResume" label="Primary Resume" value-class="text-blue-600" />
-      <StatCard :value="stats.variants" label="Variants" value-class="text-orange-600" />
+    <div class="w-full text-xl text-red-500 text-center my-4 font-semibold" v-if="limitfile">
+      Upgrade you plan to upload more resume
     </div>
+
 
     <!-- Resume List -->
     <ResumeList />
@@ -95,19 +91,39 @@ const showUploadModal = ref(false)
 const showCreateModal = ref(false)
 const hasFile= ref(false);
 const tap= ref(false);
-const stats = reactive({
-  totalResumes: 3,
-  totalDownloads: 35,
-  primaryResume: 1,
-  variants: 2
+const limitfile = ref(false);
+const supabase = useSupabaseClient();
+
+const plan=ref('');
+const checkplan = async ()=>{
+   const { data: { user }, error: userError } = await supabase.auth.getUser();
+   const userid = user?.id;
+   const {data,error} = await supabase.from('user_main').select('plan').eq('client_id',userid);
+   plan.value=data[0].plan;
+  
+}
+onMounted(async ()=>{
+ await useResumeStore().getResume();
 })
 
+const files = computed(()=>{
+  return useResumeStore().resume;
+})
 
 const filehandle= computed(() => {
   return !hasFile.value?'Click to upload':'Upload'
 });
 
 const upload = async () => {
+    await checkplan();
+    if(plan.value=='user' && files.value.length==2){
+       limitfile.value=true;
+       return;
+    }
+    else if(plan.value=='premium' && files.value.length==5){
+        limitfile.value=true;
+        return;
+    }
     const input = document.getElementById('fileInput');
     const file = fileInput.files[0];
     await useResumeStore().uploadfile(file);

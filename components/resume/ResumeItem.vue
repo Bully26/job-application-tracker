@@ -90,7 +90,7 @@ const download = async ()=>{
 }
 
 const deletefile = async()=>{
-  alert('deletion initated');
+  // alert('deletion initated');
   await useResumeStore().deleteResume(resume.name);
   await useResumeStore().getResume(true);
 }

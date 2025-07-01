@@ -11,14 +11,18 @@
         </button>
       </template>
     </PageHeader>
-
-    <Model v-model="showModal" />
+     
+    <Model v-model="showModal" @limit="setlimit" />
+     <div class="w-full text-red-500 my-3 text-xl text-center font-semibold" v-if="limitapp">
+       Upgrade your plan to upload more application.
+     </div>
     <!-- Search -->
     <div class="mb-6">
       <SearchInput v-model="searchQuery" placeholder="Search applications..." />
     </div>
 
     <!-- Applications Table -->
+    
     <ApplicationsTable v-if="!searchQuery" />
     <ApplicationsTableSearch v-if="searchQuery" :keyword="searchQuery" />
 
@@ -65,6 +69,7 @@ const showModal = ref(false);
 
 
 const { applications } = storeToRefs(useJobStore());
+const limitapp= ref(false);
 
 const filteredApplications = computed(() => {
   if (!searchQuery.value) return applications.value
@@ -87,6 +92,9 @@ const getStatusCount = (status) => {
 
 const editApplication = (application) => {
   console.log('Edit application:', application)
+}
+const setlimit =()=>{
+  limitapp.value=true;
 }
 
 const deleteApplication = (id) => {

@@ -16,7 +16,10 @@
         </button>
       </template>
     </PageHeader>
-
+    
+    <div v-if="limitfile" class="w-full text-red-500 text-xl text-center my-3 font-semibold" >
+        Upgrade your plan to upload more notes.
+    </div>
     <!-- Search -->
     <div class="mb-6">
       <SearchInput 
@@ -29,7 +32,9 @@
     <CreateNoteForm
       v-if="showCreateForm"
       @create="createNote"
+      @limit="limitnow"
       @cancel="cancelCreate"
+      
     />
     <viewNote
     v-if="openNote && showview"
@@ -70,6 +75,7 @@ import SearchInput from '~/components/ui/SearchInput.vue'
 import CreateNoteForm from '~/components/notes/CreateNoteForm.vue'
 import viewNote from '~/components/notes/viewNote.vue'
 import NoteCard from '~/components/notes/NoteCard.vue'
+import { Computer } from 'lucide-vue-next'
 
 
 definePageMeta({
@@ -80,11 +86,15 @@ onMounted(async ()=>{
   await useNoteStore().fetchnote();
 })
 
+
 const notes = computed(()=>useNoteStore().note);
 const showCreateForm = ref(false)
 const showview=ref(false)
 const searchQuery = ref('')
 const openNote=ref('')
+
+const limitfile = ref(false);
+
 
 
 
@@ -104,16 +114,19 @@ const filteredNotes = computed(() => {
 
 
 
-const createNote = (noteData) => {
+const createNote = async (noteData) => {
   const note = {
     id: notes.value.length + 1,
     ...noteData,
     updatedAt: new Date(),
     createdAt: new Date()
   }
-  
+
   notes.value.unshift(note)
   cancelCreate()
+}
+const limitnow =()=>{
+  limitfile.value=true;
 }
 
 const cancelCreate = () => {

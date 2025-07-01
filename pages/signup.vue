@@ -43,13 +43,27 @@
                             SL
                         </div>
                         <div class="ml-3">
-                            <div class="font-semibold text-gray-900">Sarah Lee</div>
-                            <div class="text-sm text-gray-600">Software Engineer at Google</div>
+                            <div class="font-semibold text-gray-900">Ravi Vinayak</div>
+                            <div class="text-sm text-gray-600">Actor at Marvel Studios</div>
                         </div>
                     </div>
                     <p class="text-gray-700 italic">
-                        "JobTracker helped me organize my applications and track my progress. I landed my dream job
-                        within 3 months!"
+                         "Before JobTracker, I was applying to jobs like a headless chicken. Now I track everything and actually feel like an adult. Still waiting on NASA to call though."
+                    </p>
+                </div>
+                 <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="flex items-center mb-4">
+                        <div
+                            class="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">
+                            SL
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-semibold text-gray-900">Khuman Singh Sonwani </div>
+                            <div class="text-sm text-gray-600">MotoGP Professional Rider</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic">
+                          "I may race on the track, but JobTracker helped me win off it — landed a killer sponsorship deal at MMS hospital thanks to staying organized."
                     </p>
                 </div>
             </div>
@@ -147,7 +161,7 @@
                             </button>
                         </div>
                         <p class="mt-1 text-sm text-gray-500">
-                            Password should be at least 8 characters long
+                            Password should be at least 6 characters long
                         </p>
                         <div class="text-red-500  absolute" v-if="(!isValidPassword(form.password) && passwordcheck)">
                             Please enter a valid password.
@@ -167,6 +181,9 @@
                     </div>
 
                     <!-- Submit Button -->
+                    <div class="w-full text-red-500 text-center" v-if="signUper">
+                            {{signUper}}
+                    </div>
                     <button @click="signup" class="btn-primary w-full" v-if="!signupSuccess">
                         Create account
                     </button>
@@ -255,6 +272,7 @@ const namecheck = ref(false);
 const passwordcheck = ref(false);
 const snamecheck = ref(false);
 const signupSuccess = ref(false);
+const signUper=ref('');
 
 const showPassword = ref(false)
 
@@ -272,7 +290,7 @@ function isValidLastName(name: string): boolean {
 }
 
 function isValidPassword(password: string): boolean {
-    return password.trim().length > 8
+    return password.trim().length >= 6
 }
 
 const user = useSupabaseUser();
@@ -311,6 +329,7 @@ async function signup() {
     });
 
     if (signUpError) {
+        signUper.value=(signUpError.message=="Database error saving new user"?'':signUpError.message);
         console.error('Signup error:', signUpError.message);
         return;
     }

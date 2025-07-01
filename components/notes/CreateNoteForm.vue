@@ -46,6 +46,22 @@ import { Redo } from 'lucide-vue-next'
 import { reactive } from 'vue'
 
 const supabase = useSupabaseClient();
+const plan=ref('');
+
+onMounted( async ()=>{
+  await useNoteStore().fetchnote();
+})
+
+const checkplan = async ()=>{
+   const { data: { user }, error: userError } = await supabase.auth.getUser();
+   const userid = user?.id;
+   const {data,error} = await supabase.from('user_main').select('plan').eq('client_id',userid);
+   plan.value=data[0].plan;
+  
+}
+const files=computed(()=>{
+  return useNoteStore().note;
+})
 
 const form = reactive({
   title: '',
@@ -56,7 +72,7 @@ const form = reactive({
 const note = ref("x");
 const oncesubmit = ref(false);
 
-const emit = defineEmits(['create', 'cancel'])
+const emit = defineEmits(['create', 'cancel','limit'])
 
 const handleSubmit = async () => {
 
@@ -68,6 +84,13 @@ const handleSubmit = async () => {
     title: form.title,
     content: form.content,
     tags: form.tags
+  }
+ 
+ 
+  await checkplan();
+  if(plan.value=='user' && files.value.length==10){
+      emit('limit');
+      return;
   }
   emit('cancel');
   await useNoteStore().addnote(note.value);

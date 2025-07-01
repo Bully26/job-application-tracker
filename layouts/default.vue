@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="flex  px-6 py-4 border-b-4 border-slate-300 justify-center" @click="navigateTo('/payment')">
-        <div class="w-fit px-5 py-1 text-center rounded-sm text-2xl" :class="planclass">
+        <div class="w-full px-5 py-1 text-center rounded-lg text-2xl font-bold text-slate-100" :class="planclass">
           {{checkplan()}}
         </div>
       </div>
@@ -147,13 +147,13 @@ const checkplan = ()=>{
 const planclass=computed(()=>{
     if(plan.value=='user')
     {
-          return 'bg-slate-400';
+          return 'bg-slate-400 ';
     }else if(plan.value=='premium'){
 
-          return 'bg-purple-400';
+          return 'bg-purple-400 ';
 
     }else if(plan.value=='king'){
-           return 'bg-amber-500';
+           return 'bg-amber-300';
     }
 });
 

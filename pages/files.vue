@@ -6,7 +6,7 @@
         
         <div class="flex items-center mb-2">
           <FolderIcon class="w-6 h-6 text-gray-600 mr-3" />
-          <h1 class="text-2xl font-bold text-gray-900">Files</h1>
+          <h1 class="text-2xl font-bold text-gray-900">Files </h1>
         </div>
         <p class="text-gray-600">Manage your documents and attachments</p>
       </div>
@@ -19,9 +19,14 @@
         </label>
       </div>
     </div>
+    <div class="w-full text-red-500 text-xl text-center my-4 font-semibold" v-if="limitfile">
+      Upgrade your plan to upload more File.
+    </div>
     <div class="mb-6">
       <SearchInput v-model="searchQuery" placeholder="Search applications..." />
     </div>
+    
+    
 
 
     <!-- File Grid -->
@@ -66,10 +71,6 @@
       <FolderIcon class="w-12 h-12 text-gray-400 mx-auto mb-4" />
       <h3 class="text-lg font-medium text-gray-900 mb-2">No files yet</h3>
       <p class="text-gray-500 mb-4">Upload your documents and keep them organized.</p>
-      <button @click="showUploadModal = true"
-        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-        Upload Your First File
-      </button>
     </div>
   </div>
 </template>
@@ -96,7 +97,9 @@ import SearchInput from '~/components/ui/SearchInput.vue'
 
 const showUploadModal = ref(false)
 const searchQuery = ref('');
-
+const limitfile = ref(false);
+const supabase = useSupabaseClient();
+const plan=ref('');
 
 onMounted(async () => {
   await usefileStore().getfile();
@@ -111,7 +114,13 @@ const searched= computed(()=>{
   );
 
 })
-
+const checkplan = async ()=>{ 
+   const { data: { user }, error: userError } = await supabase.auth.getUser();
+   const userid = user?.id;
+   const {data,error} = await supabase.from('user_main').select('plan').eq('client_id',userid);
+   plan.value=data[0].plan;
+  
+}
 const seefile = async (fileobj)=>{
   const url = await usefileStore().getfileUrl(fileobj.name);
   navigateTo(url,{external:true});
@@ -131,6 +140,16 @@ const download = async (fileobj) => {
   await usefileStore().downloadFile(fileobj.name);
 }
 const upload = async () => {
+    await checkplan();
+    if(plan.value=='user' && files.value.length==3){
+       limitfile.value=true;
+       return;
+    }
+    else if(plan.value=='premium' && files.value.length==10){
+        limitfile.value=true;
+        return;
+    }
+    
     const input = document.getElementById('fileInput');
     const file = fileInput.files[0];
     await usefileStore().uploadfile(file);

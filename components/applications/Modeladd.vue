@@ -8,9 +8,13 @@
           <div v-if="isOpen"
             class="relative bg-white rounded-lg shadow-xl w-full max-w-lg mx-auto z-10 max-h-[90vh] overflow-y-auto"
             @click.stop>
+             <div class="w-full text-red-500 text-center text-xl  mt-5 font-semibold" v-if="shower">
+                Upgrade your plan to add more application.
+              </div>
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 class="text-xl font-semibold text-gray-900">Add New Application </h2>
+             
               <button @click="closeModal" class="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
                 aria-label="Close modal">
                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,8 +121,27 @@ const props = defineProps({
   }
 })
 
+const supabase = useSupabaseClient();
+const plan=ref('');
+const limitfile=ref(false);
+
+onMounted( async ()=>{
+  await useJobStore().fetchApplications();
+})
+
+const checkplan = async ()=>{ 
+   const { data: { user }, error: userError } = await supabase.auth.getUser();
+   const userid = user?.id;
+   const {data,error} = await supabase.from('user_main').select('plan').eq('client_id',userid);
+   plan.value=data[0].plan;
+  
+}
+const files=computed(()=>{
+  return useJobStore().applications;
+})
+
 // Emits
-const emit = defineEmits(['update:modelValue', 'submit'])
+const emit = defineEmits(['update:modelValue', 'submit','limit'])
 
 // Reactive state
 const isOpen = ref(props.modelValue)
@@ -154,14 +177,22 @@ const resetForm = () => {
   formData.url = ''
   formData.resume = ''
 }
-
-onMounted(()=>{
- 
-
-})
+const shower = ref(false);
 
 const handleSubmit = async () => {
   // Validate required fields
+  await checkplan();
+  if(plan.value=='user' && files.value.length==5){
+       shower.value=true;
+       emit('limit');
+       return;
+   }
+  else if(plan.value=='premium' && files.value.length==10){
+     shower.value=true;
+        emit('limit');
+        return;
+   }
+
   if (!formData.company.trim() || !formData.position.trim()) {
     alert('Please fill in all required fields.')
     return
