@@ -26,6 +26,9 @@
     <!-- Form -->
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white py-8 px-4 shadow-lg sm:rounded-lg sm:px-10">
+        <div class="w-full text-red-500 text-center" v-if="showerr">
+               Invalid password or name
+          </div>
         <form @submit.prevent="handleLogin" class="space-y-6">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">
@@ -137,7 +140,7 @@
 
         <p class="mt-6 text-center text-sm text-gray-600">
           Don't have an account?
-          <NuxtLink @click="handleLogin" class="font-medium text-blue-600 hover:text-primary-500">
+          <NuxtLink @click="navigateTo('/signup')" class="font-medium text-blue-600 hover:text-primary-500">
             Sign up
           </NuxtLink>
         </p>
@@ -154,6 +157,7 @@
 
 <script setup>
 const { supabase } = useSupabase();
+const  showerr= ref(false);
 
 useSeoMeta({
   title: 'Sign In - JobTracker',
@@ -187,9 +191,10 @@ const handleLogin = async () => {
     password: form.password
   })
   if (error) {
-    alert('Login failed: ' + error.message);
+    showerr.value=true;
     console.error('Login error:', error)
   } else {
+    showerr.value=false;
     alert('Login successful!');
     console.log('Login successful:', data)
   }

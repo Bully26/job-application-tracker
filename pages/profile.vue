@@ -35,16 +35,16 @@
     <!-- Statistics -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <StatCard 
-        :value="stats.applicationsSent" 
+        :value="statappsent" 
         label="Applications Sent" 
       />
       <StatCard 
-        :value="stats.interviews" 
+        :value="statint" 
         label="Interviews" 
         value-class="text-blue-600" 
       />
       <StatCard 
-        :value="stats.offersReceived" 
+        :value="statappoff" 
         label="Offers Received" 
         value-class="text-green-600" 
       />
@@ -69,10 +69,29 @@ const stats = reactive({
   interviews: 5,
   offersReceived: 2
 })
+
+const resume = useJobStore();
+const { applications } = storeToRefs(resume); 
+
+const statappsent = computed(() => {
+  return applications.value?.length || 0;
+});
+
+const statint = computed(() => {
+  return applications.value?.filter(app => app.stage === 'interview').length || 0;
+});
+
+const statappoff = computed(() => {
+  return applications.value?.filter(app => app.stage === 'offer').length || 0;
+});
+
+
+
 const profileStore = useProfileStore();
 const { profile } = storeToRefs(profileStore);
 onMounted(async () => {
   await profileStore.fetchProfile();
+  await resume.fetchApplications();
 })
 
 </script>

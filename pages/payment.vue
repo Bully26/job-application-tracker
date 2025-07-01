@@ -164,6 +164,11 @@ const plans = [
 ];
 
 const checkout = async (planname: string) => {
+  if(planname=='Free')
+  {
+      navigateTo('/profile');
+      return;
+  }
   const { data: { user }, error: userError } = await useSupabaseClient().auth.getUser();
   const userid = user?.id;
   const { data, error } = await useFetch('/api/checkout', {
