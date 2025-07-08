@@ -10,7 +10,7 @@
             @click.stop>
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 class="text-xl font-semibold text-gray-900">Edit Application {{props.editdata}}</h2>
+              <h2 class="text-xl font-semibold text-gray-900">Edit Application</h2>
               <button @click="closeModal" class="p-1 hover:bg-gray-100 rounded-full transition-colors duration-200"
                 aria-label="Close modal">
                 <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
