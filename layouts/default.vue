@@ -4,7 +4,7 @@
     <div class="lg:hidden fixed top-4 left-4 z-50">
       <button
         @click="sidebarOpen = !sidebarOpen"
-        class="bg-gray-800 text-white p-2 rounded-lg shadow-lg"
+        class="bg-gray-400 text-white p-2 rounded-xl shadow-lg"
       >
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -27,6 +27,12 @@
             <h1 class=" font-semibold text-sm text-black">JOB APPLICATION</h1>
             <p class=" text-xs text-black">TRACKER</p>
           </div>
+        </div>
+         <div  @click="logout" v-if="sidebarOpen" class="w-8 h-8 ml-3 bg-slate-200 rounded-sm  flex items-center justify-end">
+           <ArrowRightStartOnRectangleIcon/>
+        </div>
+        <div class="flex justify-center mt-10">
+       
         </div>
       </div>
       <div class="flex  px-6 py-4 border-b-4 border-slate-300 justify-center" @click="navigateTo('/payment')">
@@ -94,14 +100,23 @@
           <CalendarIcon class="w-5 h-5 mr-3" />
           Calendar
         </NuxtLink>
+       
       </nav>
+       <div class="flex justify-center mt-10">
+        <div class="bg-slate-200 w-fit py-1 pl-4  rounded-sm flex items-center" @click="logout">
+          Sign Out
+         <ArrowRightStartOnRectangleIcon  class="w-5 h-5 mr-3 ml-2" />
+        </div>
+      </div>
+       
     </div>
+   
 
     <!-- Mobile overlay -->
     <div 
       v-if="sidebarOpen"
       @click="sidebarOpen = false"
-      class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+      class="fixed inset-0  bg-opacity-50 z-30 lg:hidden"
     ></div>
 
     <!-- Main content -->
@@ -121,7 +136,8 @@ import {
   FolderIcon, 
   DocumentTextIcon, 
   DocumentIcon,
-  CalendarIcon
+  CalendarIcon,
+  ArrowRightStartOnRectangleIcon
 } from '@heroicons/vue/24/outline'
 
 const  plan  = ref('User');
@@ -134,6 +150,11 @@ onMounted(async()=>{
    const {data,error} = await supabase.from('user_main').select('plan').eq('client_id',userid);
    plan.value=data[0].plan;
 })
+
+const logout = async ()=>{
+  const {error} = await supabase.auth.signOut();
+  navigateTo('/')
+}
 
 const checkplan = ()=>{
     const dt = {
